@@ -21,7 +21,7 @@ export default function MyApp({ Component, pageProps }: AppProps) {
   let trackerAxiosPlugin = trackerAxios({})
 
   return (
-    <TrackerProvider config={{ plugins: [trackerAxios] }}>
+    <TrackerProvider config={{ plugins: [trackerAxiosPlugin] }}>
       <Head />
       <ManagedUIContext>
         <Layout pageProps={pageProps}>

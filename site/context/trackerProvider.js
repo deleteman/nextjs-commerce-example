@@ -2,7 +2,6 @@ import { createContext } from 'react'
 import Tracker from '@openreplay/tracker'
 import { v4 as uuidV4 } from 'uuid'
 import { useReducer } from 'react'
-import { sendStatusCode } from 'next/dist/server/api-utils'
 
 export const TrackerContext = createContext()
 function defaultGetUserId() {
@@ -36,6 +35,7 @@ function reducer(state, action) {
         let t = newTracker(state.config)
         if (state.config.plugins) {
           state.config.plugins.forEach((p) => {
+            console.log('Using plugin...', p)
             t.use(p)
           })
         }
