@@ -35,7 +35,8 @@ function reducer(state, action) {
         let t = newTracker(state.config)
         if (state.config.plugins) {
           state.config.plugins.forEach((p) => {
-            console.log('Using plugin...', p)
+            console.log('Using plugin...')
+            console.log(p)
             t.use(p)
           })
         }

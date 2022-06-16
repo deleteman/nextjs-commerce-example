@@ -18,7 +18,9 @@ export default function MyApp({ Component, pageProps }: AppProps) {
     document.body.classList?.remove('loading')
   }, [])
 
-  let trackerAxiosPlugin = trackerAxios({})
+  let trackerAxiosPlugin = trackerAxios({
+    failuresOnly: false,
+  })
 
   return (
     <TrackerProvider config={{ plugins: [trackerAxiosPlugin] }}>
