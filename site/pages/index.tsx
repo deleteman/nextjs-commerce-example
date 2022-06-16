@@ -5,7 +5,7 @@ import { Grid, Marquee, Hero } from '@components/ui'
 // import HomeAllProductsGrid from '@components/common/HomeAllProductsGrid'
 import type { GetStaticPropsContext, InferGetStaticPropsType } from 'next'
 import { TrackerContext } from 'context/trackerProvider'
-import { useContext, useEffect } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import axios from 'axios'
 import { Product } from '@commerce/types/product'
 import slugify from 'slugify'
@@ -18,6 +18,7 @@ type MakeUpProduct = {
 }
 
 async function getMakeUpProducts(): Promise<Product[]> {
+  console.log('Getting the makeup products')
   let { data } = await axios.get(
     'http://makeup-api.herokuapp.com/api/v1/products.json?brand=maybelline'
   )
@@ -60,11 +61,9 @@ export async function getStaticProps({
   const { pages } = await pagesPromise
   const { categories, brands } = await siteInfoPromise
 
-  const makeUpProducts: Product[] = await getMakeUpProducts()
   return {
     props: {
       products,
-      makeUpProducts,
       categories,
       brands,
       pages,
@@ -75,13 +74,20 @@ export async function getStaticProps({
 
 export default function Home({
   products,
-  makeUpProducts,
 }: InferGetStaticPropsType<typeof getStaticProps>) {
   const { initTracker, startTracking } = useContext(TrackerContext)
+  const [makeUpProducts, setMakeUpProducts] = useState<Product[]>([])
 
   useEffect(() => {
     initTracker()
     startTracking()
+
+    async function getProds() {
+      const prods: Product[] = await getMakeUpProducts()
+      setMakeUpProducts(prods)
+    }
+
+    getProds()
   }, [])
 
   return (
