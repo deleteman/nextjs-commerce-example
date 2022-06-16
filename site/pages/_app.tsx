@@ -7,7 +7,7 @@ import { FC, useEffect } from 'react'
 import type { AppProps } from 'next/app'
 import { Head } from '@components/common'
 import { ManagedUIContext } from '@components/ui/context'
-import trackerAxios from '@openreplay/tracker-axios'
+import trackerAxios from '@openreplay/tracker-axios/cjs'
 
 const Noop: FC = ({ children }) => <>{children}</>
 
@@ -18,12 +18,17 @@ export default function MyApp({ Component, pageProps }: AppProps) {
     document.body.classList?.remove('loading')
   }, [])
 
-  let trackerAxiosPlugin = trackerAxios({
-    failuresOnly: false,
-  })
+  let plugins = [
+    {
+      fn: trackerAxios,
+      config: {
+        failuresOnly: false,
+      },
+    },
+  ]
 
   return (
-    <TrackerProvider config={{ plugins: [trackerAxiosPlugin] }}>
+    <TrackerProvider config={{ plugins }}>
       <Head />
       <ManagedUIContext>
         <Layout pageProps={pageProps}>

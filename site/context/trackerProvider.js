@@ -37,7 +37,7 @@ function reducer(state, action) {
           state.config.plugins.forEach((p) => {
             console.log('Using plugin...')
             console.log(p)
-            t.use(p)
+            t.use(p.fn(p.config))
           })
         }
         //t.use(trackerAxios(options)); // check list of available options below
@@ -48,6 +48,7 @@ function reducer(state, action) {
     }
     case 'start': {
       console.log('Starting tracker...')
+      console.log(state.tracker)
       state.tracker.start()
       return state
     }
