@@ -4,6 +4,42 @@ import { ProductCard } from '@components/product'
 import { Grid, Marquee, Hero } from '@components/ui'
 // import HomeAllProductsGrid from '@components/common/HomeAllProductsGrid'
 import type { GetStaticPropsContext, InferGetStaticPropsType } from 'next'
+import { TrackerContext } from 'context/trackerProvider'
+import { useContext, useEffect } from 'react'
+import axios from 'axios'
+import { Product } from '@commerce/types/product'
+import slugify from 'slugify'
+
+type MakeUpProduct = {
+  id: number
+  name: string
+  image_link: string
+  price: string
+}
+
+async function getMakeUpProducts(): Promise<Product[]> {
+  let { data } = await axios.get(
+    'http://makeup-api.herokuapp.com/api/v1/products.json?brand=maybelline'
+  )
+  const products: MakeUpProduct[] = data
+
+  let newProds: Product[] = products.map((p) => {
+    return {
+      id: '' + p.id,
+      slug: slugify(p.name),
+      name: p.name,
+      description: '',
+      images: [{ url: p.image_link }],
+      variants: [],
+      price: {
+        value: +p.price,
+      },
+      options: [],
+    }
+  })
+
+  return newProds
+}
 
 export async function getStaticProps({
   preview,
@@ -24,9 +60,11 @@ export async function getStaticProps({
   const { pages } = await pagesPromise
   const { categories, brands } = await siteInfoPromise
 
+  const makeUpProducts: Product[] = await getMakeUpProducts()
   return {
     props: {
       products,
+      makeUpProducts,
       categories,
       brands,
       pages,
@@ -37,7 +75,15 @@ export async function getStaticProps({
 
 export default function Home({
   products,
+  makeUpProducts,
 }: InferGetStaticPropsType<typeof getStaticProps>) {
+  const { initTracker, startTracking } = useContext(TrackerContext)
+
+  useEffect(() => {
+    initTracker()
+    startTracking()
+  }, [])
+
   return (
     <>
       <Grid variant="filled">
@@ -54,7 +100,7 @@ export default function Home({
         ))}
       </Grid>
       <Marquee variant="secondary">
-        {products.slice(0, 3).map((product: any, i: number) => (
+        {makeUpProducts.slice(0, 3).map((product: any, i: number) => (
           <ProductCard key={product.id} product={product} variant="slim" />
         ))}
       </Marquee>

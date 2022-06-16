@@ -23,5 +23,11 @@
       "pre-commit": "turbo run lint"
     }
   },
-  "packageManager": "yarn@1.22.17"
+  "packageManager": "yarn@1.22.17",
+  "dependencies": {
+    "@openreplay/tracker": "^3.5.12",
+    "@openreplay/tracker-axios": "^3.5.1",
+    "axios": "^0.27.2",
+    "slugify": "^1.6.5"
+  }
 }

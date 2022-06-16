@@ -26,9 +26,9 @@ const ProductCard: FC<Props> = ({
   variant = 'default',
 }) => {
   const { price } = usePrice({
-    amount: product.price.value,
-    baseAmount: product.price.retailPrice,
-    currencyCode: product.price.currencyCode!,
+    amount: product.price?.value,
+    baseAmount: product.price?.retailPrice,
+    currencyCode: product.price?.currencyCode!,
   })
 
   const rootClassName = cn(
