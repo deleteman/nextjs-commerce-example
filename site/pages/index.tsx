@@ -20,7 +20,7 @@ type MakeUpProduct = {
 async function getMakeUpProducts(): Promise<Product[]> {
   console.log('Getting the makeup products')
   let { data } = await axios.get(
-    'http://makeup-api.herokuapp.com/api/v1/products.json?brand=maybelline'
+    'https://makeup-api.herokuapp.com/api/v1/products.json?brand=maybelline'
   )
   const products: MakeUpProduct[] = data
 
