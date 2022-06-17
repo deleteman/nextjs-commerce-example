@@ -86,6 +86,8 @@ export default function Home({
       const prods: Product[] = await getMakeUpProducts()
       setMakeUpProducts(prods)
     }
+
+    getProds()
   }, [])
 
   return (
