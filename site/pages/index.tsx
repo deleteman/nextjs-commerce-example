@@ -80,14 +80,12 @@ export default function Home({
 
   useEffect(() => {
     initTracker()
-    startTracking()
 
     async function getProds() {
+      await startTracking()
       const prods: Product[] = await getMakeUpProducts()
       setMakeUpProducts(prods)
     }
-
-    getProds()
   }, [])
 
   return (
