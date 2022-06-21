@@ -24,6 +24,10 @@
     }
   },
   "packageManager": "yarn@1.22.17",
+  "resolutions": {
+    "@types/react": "17.0.2",
+    "@types/react-dom": "17.0.2"
+  },
   "dependencies": {
     "@openreplay/tracker": "^3.5.12",
     "@openreplay/tracker-axios": "^3.5.1",

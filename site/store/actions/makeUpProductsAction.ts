@@ -1,9 +1,10 @@
 import { GET_PRODUCTS, PRODUCTS_ERROR } from '../types'
 import axios from 'axios'
 import slugify from 'slugify'
+import { AnyAction } from 'redux'
 
 //async function getMakeUpProducts() {
-export const getMakeUpProducts = () => async (dispatch) => {
+export const getMakeUpProducts = () => async (dispatch: any) => {
   console.log('Getting the makeup products')
 
   try {
@@ -12,7 +13,7 @@ export const getMakeUpProducts = () => async (dispatch) => {
     )
     const products = data
 
-    let newProds = products.map((p) => {
+    let newProds = products.map((p: any) => {
       return {
         id: '' + p.id,
         slug: slugify(p.name),

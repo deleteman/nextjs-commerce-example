@@ -91,7 +91,7 @@ export default function Home({
       await startTracking()
       //const prods: Product[] = await getMakeUpProducts()
       //setMakeUpProducts(prods)
-      dispatch(getMakeUpProducts())
+      dispatch(getMakeUpProducts() as any)
     }
 
     getProds()
