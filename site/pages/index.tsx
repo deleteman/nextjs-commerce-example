@@ -8,7 +8,8 @@ import { TrackerContext } from 'context/trackerProvider'
 import { useContext, useEffect, useState } from 'react'
 import axios from 'axios'
 import { Product } from '@commerce/types/product'
-import slugify from 'slugify'
+import { useDispatch, useSelector } from 'react-redux'
+import { getMakeUpProducts } from '../store/actions/makeUpProductsAction'
 
 type MakeUpProduct = {
   id: number
@@ -16,7 +17,7 @@ type MakeUpProduct = {
   image_link: string
   price: string
 }
-
+/*
 async function getMakeUpProducts(): Promise<Product[]> {
   console.log('Getting the makeup products')
   let { data } = await axios.get(
@@ -41,6 +42,7 @@ async function getMakeUpProducts(): Promise<Product[]> {
 
   return newProds
 }
+*/
 
 export async function getStaticProps({
   preview,
@@ -76,19 +78,24 @@ export default function Home({
   products,
 }: InferGetStaticPropsType<typeof getStaticProps>) {
   const { initTracker, startTracking } = useContext(TrackerContext)
-  const [makeUpProducts, setMakeUpProducts] = useState<Product[]>([])
+  //const [makeUpProducts, setMakeUpProducts] = useState<Product[]>([])
+  const dispatch = useDispatch()
+  const makeUpProductsList = useSelector((state: any) => state.makeUpProducts)
+
+  const { makeUpProducts } = makeUpProductsList
 
   useEffect(() => {
     initTracker()
 
     async function getProds() {
       await startTracking()
-      const prods: Product[] = await getMakeUpProducts()
-      setMakeUpProducts(prods)
+      //const prods: Product[] = await getMakeUpProducts()
+      //setMakeUpProducts(prods)
+      dispatch(getMakeUpProducts())
     }
 
     getProds()
-  }, [])
+  }, [dispatch])
 
   return (
     <>

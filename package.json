@@ -28,6 +28,11 @@
     "@openreplay/tracker": "^3.5.12",
     "@openreplay/tracker-axios": "^3.5.1",
     "axios": "^0.27.2",
+    "next-redux-wrapper": "^7.0.5",
+    "react-redux": "^8.0.2",
+    "redux": "^4.2.0",
+    "redux-devtools-extension": "^2.13.9",
+    "redux-thunk": "^2.4.1",
     "slugify": "^1.6.5"
   }
 }
