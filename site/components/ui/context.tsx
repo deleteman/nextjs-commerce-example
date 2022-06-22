@@ -225,18 +225,14 @@ export const ManagedUIContext: FC = ({ children }) => {
   const [store, setStore] = useState<Store>()
 
   useEffect(() => {
-    console.log('about to init tracker')
     initTracker()
-    console.log('tracker initialized!')
   }, [])
 
   useEffect(() => {
-    console.log('Inside second useEffect')
     if (!pluginsReturnedValues['redux']) return
     let middleWares = pluginsReturnedValues['redux']
       ? [pluginsReturnedValues['redux']]
       : []
-    console.log('Using ', middleWares.length, ' middlewares')
     setStore(createReduxStore(middleWares))
   }, [pluginsReturnedValues])
 

@@ -68,16 +68,6 @@ export default function TrackerProvider({ children, config = {} }) {
     startTracking: () => dispatch({ type: 'start' }),
     initTracker: () => dispatch({ type: 'init' }),
     pluginsReturnedValues: { ...state.pluginsReturnedValue },
-    getPluginReturnValue: useCallback(
-      (pname) => {
-        if (state.pluginsReturnedValue && pname in state.pluginsReturnedValue) {
-          return state?.pluginsReturnedValue[pname]
-        } else {
-          return null
-        }
-      },
-      [state]
-    ),
   }
   return (
     <TrackerContext.Provider value={value}>{children}</TrackerContext.Provider>

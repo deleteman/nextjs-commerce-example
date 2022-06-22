@@ -77,18 +77,14 @@ export async function getStaticProps({
 export default function Home({
   products,
 }: InferGetStaticPropsType<typeof getStaticProps>) {
-  const { initTracker, startTracking } = useContext(TrackerContext)
-  //const [makeUpProducts, setMakeUpProducts] = useState<Product[]>([])
+  const { startTracking } = useContext(TrackerContext)
   const dispatch = useDispatch()
   const makeUpProductsList = useSelector((state: any) => state.makeUpProducts)
 
   const { makeUpProducts } = makeUpProductsList
 
   useEffect(() => {
-    //initTracker()
-
     async function getProds() {
-      console.log("about to call 'startTracking'")
       await startTracking()
       dispatch(getMakeUpProducts() as any)
     }
