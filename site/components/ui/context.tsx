@@ -1,5 +1,17 @@
-import React, { FC, useCallback, useMemo } from 'react'
+import React, {
+  FC,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react'
 import { ThemeProvider } from 'next-themes'
+import { Provider } from 'react-redux'
+import createReduxStore from '../../store/store'
+import { TrackerContext } from 'context/trackerProvider'
+import MiddlewarePlugin from 'next/dist/build/webpack/plugins/middleware-plugin'
+import { Store } from 'redux'
 
 export interface State {
   displaySidebar: boolean
@@ -209,8 +221,26 @@ export const useUI = () => {
   return context
 }
 
-export const ManagedUIContext: FC = ({ children }) => (
-  <UIProvider>
-    <ThemeProvider>{children}</ThemeProvider>
-  </UIProvider>
-)
+export const ManagedUIContext: FC = ({ children }) => {
+  const { initTracker, getPluginReturnValue } = useContext(TrackerContext)
+  const [store, setStore] = useState<Store>()
+
+  useEffect(() => {
+    initTracker()
+    let middleWare = getPluginReturnValue('redux')
+    let middleWares = middleWare ? [middleWare] : []
+    setStore(createReduxStore(middleWares))
+  }, [])
+
+  return (
+    <div>
+      {store && (
+        <Provider store={store}>
+          <UIProvider>
+            <ThemeProvider>{children}</ThemeProvider>
+          </UIProvider>
+        </Provider>
+      )}
+    </div>
+  )
+}

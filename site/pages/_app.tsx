@@ -8,8 +8,7 @@ import type { AppProps } from 'next/app'
 import { Head } from '@components/common'
 import { ManagedUIContext } from '@components/ui/context'
 import trackerAxios from '@openreplay/tracker-axios/cjs'
-import { Provider } from 'react-redux'
-import store from '../store/store'
+import trackerRedux from '@openreplay/tracker-redux'
 
 const Noop: FC = ({ children }) => <>{children}</>
 
@@ -39,6 +38,7 @@ export default function MyApp({ Component, pageProps }: AppProps) {
   let plugins = [
     {
       fn: trackerAxios,
+      name: 'axios',
       config: {
         failuresOnly: false,
         sanitiser: (data: RequestResponseData) => {
@@ -47,18 +47,21 @@ export default function MyApp({ Component, pageProps }: AppProps) {
         },
       },
     },
+    {
+      fn: trackerRedux,
+      name: 'redux',
+      config: {},
+    },
   ]
 
   return (
-    <Provider store={store}>
-      <TrackerProvider config={{ plugins }}>
-        <Head />
-        <ManagedUIContext>
-          <Layout pageProps={pageProps}>
-            <Component {...pageProps} />
-          </Layout>
-        </ManagedUIContext>
-      </TrackerProvider>
-    </Provider>
+    <TrackerProvider config={{ plugins }}>
+      <Head />
+      <ManagedUIContext>
+        <Layout pageProps={pageProps}>
+          <Component {...pageProps} />
+        </Layout>
+      </ManagedUIContext>
+    </TrackerProvider>
   )
 }

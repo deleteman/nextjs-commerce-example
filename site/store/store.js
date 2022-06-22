@@ -6,12 +6,15 @@ import rootReducer from './reducers'
 
 const initalState = {}
 
-const middleware = [thunk]
+export default function createReduxStor(extraMiddleware = []) {
+  const middleware = [thunk, ...extraMiddleware]
 
-const store = createStore(
-  rootReducer,
-  initalState,
-  composeWithDevTools(applyMiddleware(...middleware))
-)
+  const store = createStore(
+    rootReducer,
+    initalState,
+    composeWithDevTools(applyMiddleware(...middleware))
+  )
+  return store
+}
 
-export default store
+//export default store

@@ -85,7 +85,7 @@ export default function Home({
   const { makeUpProducts } = makeUpProductsList
 
   useEffect(() => {
-    initTracker()
+    //initTracker()
 
     async function getProds() {
       await startTracking()

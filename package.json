@@ -31,6 +31,7 @@
   "dependencies": {
     "@openreplay/tracker": "^3.5.12",
     "@openreplay/tracker-axios": "^3.5.1",
+    "@openreplay/tracker-redux": "^3.5.0",
     "axios": "^0.27.2",
     "next-redux-wrapper": "^7.0.5",
     "react-redux": "^8.0.2",

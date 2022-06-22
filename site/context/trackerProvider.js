@@ -33,13 +33,14 @@ function reducer(state, action) {
       if (!state.tracker) {
         console.log('Instantiaing the tracker for the first time...')
         let t = newTracker(state.config)
+        let pluginsReturnedValue = {}
         if (state.config.plugins) {
           state.config.plugins.forEach((p) => {
             console.log('Using plugin...')
-            t.use(p.fn(p.config))
+            pluginsReturnedValue[p.name] = t.use(p.fn(p.config))
           })
         }
-        return { ...state, tracker: t }
+        return { ...state, pluginsReturnedValue, tracker: t }
       }
       return state
     }
@@ -55,6 +56,13 @@ export default function TrackerProvider({ children, config = {} }) {
   let value = {
     startTracking: () => dispatch({ type: 'start' }),
     initTracker: () => dispatch({ type: 'init' }),
+    getPluginReturnValue: (pname) => {
+      if (state.pluginsReturnedValue && pname in state.pluginsReturnedValue) {
+        return state?.pluginsReturnedValue[pname]
+      } else {
+        return null
+      }
+    },
   }
   return (
     <TrackerContext.Provider value={value}>{children}</TrackerContext.Provider>
