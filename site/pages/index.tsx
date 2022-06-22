@@ -88,9 +88,8 @@ export default function Home({
     //initTracker()
 
     async function getProds() {
+      console.log("about to call 'startTracking'")
       await startTracking()
-      //const prods: Product[] = await getMakeUpProducts()
-      //setMakeUpProducts(prods)
       dispatch(getMakeUpProducts() as any)
     }
 

@@ -6,8 +6,13 @@ import rootReducer from './reducers'
 
 const initalState = {}
 
-export default function createReduxStor(extraMiddleware = []) {
+export default function createReduxStore(extraMiddleware = []) {
   const middleware = [thunk, ...extraMiddleware]
+  console.log(
+    'Creating the new redux store with ',
+    middleware.length,
+    ' middlewares'
+  )
 
   const store = createStore(
     rootReducer,

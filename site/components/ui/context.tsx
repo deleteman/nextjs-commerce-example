@@ -10,7 +10,6 @@ import { ThemeProvider } from 'next-themes'
 import { Provider } from 'react-redux'
 import createReduxStore from '../../store/store'
 import { TrackerContext } from 'context/trackerProvider'
-import MiddlewarePlugin from 'next/dist/build/webpack/plugins/middleware-plugin'
 import { Store } from 'redux'
 
 export interface State {
@@ -226,9 +225,12 @@ export const ManagedUIContext: FC = ({ children }) => {
   const [store, setStore] = useState<Store>()
 
   useEffect(() => {
+    console.log('about to init tracker')
     initTracker()
+    console.log('tracker started!')
     let middleWare = getPluginReturnValue('redux')
     let middleWares = middleWare ? [middleWare] : []
+    console.log('Using ', middleWares.length, ' middlewares')
     setStore(createReduxStore(middleWares))
   }, [])
 
