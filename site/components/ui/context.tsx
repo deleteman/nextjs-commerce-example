@@ -7,7 +7,7 @@ import React, {
   useState,
 } from 'react'
 import { ThemeProvider } from 'next-themes'
-import { Provider } from 'react-redux'
+import { Provider, useSelector } from 'react-redux'
 import createReduxStore from '../../store/store'
 import { TrackerContext } from 'context/trackerProvider'
 import { Store } from 'redux'
@@ -221,18 +221,24 @@ export const useUI = () => {
 }
 
 export const ManagedUIContext: FC = ({ children }) => {
-  const { initTracker, getPluginReturnValue } = useContext(TrackerContext)
+  const { initTracker, pluginsReturnedValues } = useContext(TrackerContext)
   const [store, setStore] = useState<Store>()
 
   useEffect(() => {
     console.log('about to init tracker')
     initTracker()
-    console.log('tracker started!')
-    let middleWare = getPluginReturnValue('redux')
-    let middleWares = middleWare ? [middleWare] : []
+    console.log('tracker initialized!')
+  }, [])
+
+  useEffect(() => {
+    console.log('Inside second useEffect')
+    if (!pluginsReturnedValues['redux']) return
+    let middleWares = pluginsReturnedValues['redux']
+      ? [pluginsReturnedValues['redux']]
+      : []
     console.log('Using ', middleWares.length, ' middlewares')
     setStore(createReduxStore(middleWares))
-  }, [])
+  }, [pluginsReturnedValues])
 
   return (
     <div>

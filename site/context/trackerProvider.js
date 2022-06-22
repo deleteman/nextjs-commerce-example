@@ -1,4 +1,4 @@
-import { createContext } from 'react'
+import { createContext, useCallback } from 'react'
 import Tracker from '@openreplay/tracker'
 import { v4 as uuidV4 } from 'uuid'
 import { useReducer } from 'react'
@@ -40,8 +40,15 @@ function reducer(state, action) {
             pluginsReturnedValue[p.name] = t.use(p.fn(p.config))
           })
         }
-        return { ...state, pluginsReturnedValue, tracker: t }
+        return {
+          ...state,
+          pluginsReturnedValue: pluginsReturnedValue,
+          tracker: t,
+        }
       }
+      return state
+    }
+    case 'get': {
       return state
     }
     case 'start': {
@@ -52,17 +59,25 @@ function reducer(state, action) {
   }
 }
 export default function TrackerProvider({ children, config = {} }) {
-  let [state, dispatch] = useReducer(reducer, { tracker: null, config })
+  let [state, dispatch] = useReducer(reducer, {
+    tracker: null,
+    pluginsReturnedValue: {},
+    config,
+  })
   let value = {
     startTracking: () => dispatch({ type: 'start' }),
     initTracker: () => dispatch({ type: 'init' }),
-    getPluginReturnValue: (pname) => {
-      if (state.pluginsReturnedValue && pname in state.pluginsReturnedValue) {
-        return state?.pluginsReturnedValue[pname]
-      } else {
-        return null
-      }
-    },
+    pluginsReturnedValues: { ...state.pluginsReturnedValue },
+    getPluginReturnValue: useCallback(
+      (pname) => {
+        if (state.pluginsReturnedValue && pname in state.pluginsReturnedValue) {
+          return state?.pluginsReturnedValue[pname]
+        } else {
+          return null
+        }
+      },
+      [state]
+    ),
   }
   return (
     <TrackerContext.Provider value={value}>{children}</TrackerContext.Provider>
