@@ -16,6 +16,8 @@ function newTracker(config) {
   const trackerConfig = {
     projectKey:
       config?.projectKey || process.env.NEXT_PUBLIC_OPENREPLAY_PROJECT_KEY,
+    ingestPoint:
+      config?.ingestPoint || process.env.NEXT_PUBLIC_OPENREPLAY_INGEST_POINT,
   }
 
   console.log('Tracker configuration: ')
@@ -46,9 +48,6 @@ function reducer(state, action) {
           tracker: t,
         }
       }
-      return state
-    }
-    case 'get': {
       return state
     }
     case 'start': {
