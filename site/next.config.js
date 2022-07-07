@@ -8,6 +8,9 @@ const isSaleor = provider === '@vercel/commerce-saleor'
 const isSwell = provider === '@vercel/commerce-swell'
 const isVendure = provider === '@vercel/commerce-vendure'
 
+console.log('=== commerce config ====')
+console.log(commerce)
+
 module.exports = withCommerceConfig({
   commerce,
   i18n: {
@@ -16,6 +19,12 @@ module.exports = withCommerceConfig({
   },
   images: {
     domains: ['d3t32hsnjxo7q6.cloudfront.net'],
+  },
+  commerce: {
+    features: {
+      cart: true,
+      wishlist: true,
+    },
   },
   rewrites() {
     return [

@@ -1,6 +1,6 @@
 import s from './ProductSidebar.module.css'
 import { useAddItem } from '@framework/cart'
-import { FC, useEffect, useState } from 'react'
+import { FC, useContext, useEffect, useState } from 'react'
 import { ProductOptions } from '@components/product'
 import type { Product } from '@commerce/types/product'
 import { Button, Text, Rating, Collapse, useUI } from '@components/ui'
@@ -9,6 +9,7 @@ import {
   selectDefaultOptionFromProduct,
   SelectedOptions,
 } from '../helpers'
+import { TrackerContext } from '../../../context/trackerProvider'
 
 interface ProductSidebarProps {
   product: Product
@@ -17,6 +18,7 @@ interface ProductSidebarProps {
 
 const ProductSidebar: FC<ProductSidebarProps> = ({ product, className }) => {
   const addItem = useAddItem()
+  const { logEvent, logIssue } = useContext(TrackerContext)
   const { openSidebar, setSidebarView } = useUI()
   const [loading, setLoading] = useState(false)
   const [selectedOptions, setSelectedOptions] = useState<SelectedOptions>({})
@@ -28,6 +30,28 @@ const ProductSidebar: FC<ProductSidebarProps> = ({ product, className }) => {
   const variant = getProductVariant(product, selectedOptions)
   const addToCart = async () => {
     setLoading(true)
+
+    const validSizes = product.options
+      .filter((o) => o.id == 'option-size')
+      .map((o) => o.values)[0]
+
+    console.log(validSizes)
+
+    let pickedSized = validSizes.find((s) => {
+      return selectedOptions.size == s.label.toLowerCase()
+    })
+    console.log(pickedSized)
+    if (!pickedSized) {
+      logIssue({
+        name: 'Product added without a size',
+        data: {
+          product_id: product.id,
+          added_date: new Date(),
+          available_options: validSizes,
+        },
+      })
+    }
+
     try {
       await addItem({
         productId: String(product.id),
@@ -35,6 +59,14 @@ const ProductSidebar: FC<ProductSidebarProps> = ({ product, className }) => {
       })
       setSidebarView('CART_VIEW')
       openSidebar()
+      console.log('Sending event...')
+      logEvent({
+        name: 'product_added',
+        data: {
+          id: product.id,
+          date_added: new Date(),
+        },
+      })
       setLoading(false)
     } catch (err) {
       setLoading(false)

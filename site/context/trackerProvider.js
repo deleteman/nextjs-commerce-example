@@ -16,8 +16,13 @@ function newTracker(config) {
   const trackerConfig = {
     projectKey:
       config?.projectKey || process.env.NEXT_PUBLIC_OPENREPLAY_PROJECT_KEY,
-    ingestPoint:
-      config?.ingestPoint || process.env.NEXT_PUBLIC_OPENREPLAY_INGEST_POINT,
+    __DISABLE_SECURE_MODE:
+      config?.__DISABLE_SECURE_MODE ||
+      process.env.NEXT_PUBLIC_OPENREPLAY_DISABLE_SECURE_MODE,
+  }
+  if (config?.ingestPoint || process.env.NEXT_PUBLIC_OPENREPLAY_INGEST_POINT) {
+    trackerConfig.ingestPoint =
+      config?.ingestPoint || process.env.NEXT_PUBLIC_OPENREPLAY_INGEST_POINT
   }
 
   console.log('Tracker configuration: ')
@@ -55,6 +60,16 @@ function reducer(state, action) {
       state.tracker.start()
       return state
     }
+    case 'logEvent': {
+      console.log('Logging event')
+      state.tracker?.event(action.payload?.name, action.payload?.data)
+      return state
+    }
+    case 'logIssue': {
+      console.log('Logging issue')
+      state.tracker?.issue(action.payload?.name, action.payload?.data)
+      return state
+    }
   }
 }
 export default function TrackerProvider({ children, config = {} }) {
@@ -66,6 +81,8 @@ export default function TrackerProvider({ children, config = {} }) {
   let value = {
     startTracking: () => dispatch({ type: 'start' }),
     initTracker: () => dispatch({ type: 'init' }),
+    logEvent: (evnt) => dispatch({ type: 'logEvent', payload: evnt }),
+    logIssue: (evnt) => dispatch({ type: 'logIssue', payload: evnt }),
     pluginsReturnedValues: { ...state.pluginsReturnedValue },
   }
   return (

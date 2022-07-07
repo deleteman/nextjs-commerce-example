@@ -16,8 +16,9 @@ function withCommerceConfig(nextConfig = {}) {
     )
   }
 
+  console.log('Using ', path.posix.join(provider, 'next.config'))
   const commerceNextConfig = importCwd(path.posix.join(provider, 'next.config'))
-  const config = merge(nextConfig, commerceNextConfig)
+  const config = merge(commerceNextConfig, nextConfig)
   const features = merge(
     config.commerce.features,
     config.commerce[provider]?.features ?? {}

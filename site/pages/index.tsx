@@ -2,12 +2,9 @@ import commerce from '@lib/api/commerce'
 import { Layout } from '@components/common'
 import { ProductCard } from '@components/product'
 import { Grid, Marquee, Hero } from '@components/ui'
-// import HomeAllProductsGrid from '@components/common/HomeAllProductsGrid'
 import type { GetStaticPropsContext, InferGetStaticPropsType } from 'next'
 import { TrackerContext } from 'context/trackerProvider'
 import { useContext, useEffect, useState } from 'react'
-import axios from 'axios'
-import { Product } from '@commerce/types/product'
 import { useDispatch, useSelector } from 'react-redux'
 import { getMakeUpProducts } from '../store/actions/makeUpProductsAction'
 
@@ -17,32 +14,6 @@ type MakeUpProduct = {
   image_link: string
   price: string
 }
-/*
-async function getMakeUpProducts(): Promise<Product[]> {
-  console.log('Getting the makeup products')
-  let { data } = await axios.get(
-    'https://makeup-api.herokuapp.com/api/v1/products.json?brand=maybelline&apiKey=123fff132'
-  )
-  const products: MakeUpProduct[] = data
-
-  let newProds: Product[] = products.map((p) => {
-    return {
-      id: '' + p.id,
-      slug: slugify(p.name),
-      name: p.name,
-      description: '',
-      images: [{ url: p.image_link }],
-      variants: [],
-      price: {
-        value: +p.price,
-      },
-      options: [],
-    }
-  })
-
-  return newProds
-}
-*/
 
 export async function getStaticProps({
   preview,
@@ -108,7 +79,7 @@ export default function Home({
         ))}
       </Grid>
       <Marquee variant="secondary">
-        {makeUpProducts.slice(0, 3).map((product: any, i: number) => (
+        {makeUpProducts?.slice(0, 3).map((product: any, i: number) => (
           <ProductCard key={product.id} product={product} variant="slim" />
         ))}
       </Marquee>

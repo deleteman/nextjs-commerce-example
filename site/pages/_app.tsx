@@ -55,7 +55,7 @@ export default function MyApp({ Component, pageProps }: AppProps) {
   ]
 
   return (
-    <TrackerProvider config={{ plugins }}>
+    <TrackerProvider config={{ plugins, __DISABLE_SECURE_MODE: true }}>
       <Head />
       <ManagedUIContext>
         <Layout pageProps={pageProps}>
