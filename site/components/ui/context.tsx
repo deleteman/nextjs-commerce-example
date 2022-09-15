@@ -229,11 +229,11 @@ export const ManagedUIContext: FC = ({ children }) => {
   }, [])
 
   useEffect(() => {
-    if (!pluginsReturnedValues['redux']) return
-    let middleWares = pluginsReturnedValues['redux']
-      ? [pluginsReturnedValues['redux']]
-      : []
-    setStore(createReduxStore(middleWares))
+    //   if (!pluginsReturnedValues['redux']) return
+    //   let middleWares = pluginsReturnedValues['redux']
+    //     ? [pluginsReturnedValues['redux']]
+    //     : []
+    setStore(createReduxStore(/*middleWares*/))
   }, [pluginsReturnedValues])
 
   return (

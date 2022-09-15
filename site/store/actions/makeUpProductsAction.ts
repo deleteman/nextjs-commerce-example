@@ -1,15 +1,14 @@
 import { GET_PRODUCTS, PRODUCTS_ERROR } from "../types";
 import axios from "axios";
 import slugify from "slugify";
+import { getMakeUpURL } from "./utils";
 
 export const getMakeUpProducts = () =>
   async (dispatch: any) => {
     console.log("Getting the makeup products");
 
     try {
-      let { data } = await axios.get(
-        "https://makeup-api.herokuapp.com/api/v1/products.json?brand=maybelline&apiKey=123fff132",
-      );
+      let { data } = await axios.get(getMakeUpURL());
       const products = data;
 
       let newProds = products.map((p: any) => {

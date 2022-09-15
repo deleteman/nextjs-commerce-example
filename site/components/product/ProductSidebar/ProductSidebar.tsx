@@ -10,6 +10,7 @@ import {
   SelectedOptions,
 } from '../helpers'
 import { TrackerContext } from '../../../context/trackerProvider'
+import { useProductsStore } from '@components/stores/cartStore'
 
 interface ProductSidebarProps {
   product: Product
@@ -22,6 +23,13 @@ const ProductSidebar: FC<ProductSidebarProps> = ({ product, className }) => {
   const { openSidebar, setSidebarView } = useUI()
   const [loading, setLoading] = useState(false)
   const [selectedOptions, setSelectedOptions] = useState<SelectedOptions>({})
+  const { pluginsReturnedValues } = useContext(TrackerContext)
+
+  //name the store?
+  const useProductStoreTracked = useProductsStore(
+    pluginsReturnedValues.zustand('products_store')
+  )
+  const { addProduct } = useProductStoreTracked()
 
   useEffect(() => {
     selectDefaultOptionFromProduct(product, setSelectedOptions)
@@ -53,6 +61,7 @@ const ProductSidebar: FC<ProductSidebarProps> = ({ product, className }) => {
     }
 
     try {
+      addProduct(product)
       await addItem({
         productId: String(product.id),
         variantId: String(variant ? variant.id : product.variants[0]?.id),

@@ -1,6 +1,6 @@
 import cn from 'clsx'
 import Link from 'next/link'
-import { FC } from 'react'
+import { FC, useContext, useEffect } from 'react'
 import s from './CartSidebarView.module.css'
 import CartItem from '../CartItem'
 import { Button, Text } from '@components/ui'
@@ -9,10 +9,27 @@ import { Bag, Cross, Check } from '@components/icons'
 import useCart from '@framework/cart/use-cart'
 import usePrice from '@framework/product/use-price'
 import SidebarLayout from '@components/common/SidebarLayout'
+import { useProductsStore } from '@components/stores/cartStore'
+import type { Product } from '@commerce/types/product'
+import { TrackerContext } from 'context/trackerProvider'
 
 const CartSidebarView: FC = () => {
   const { closeSidebar, setSidebarView } = useUI()
   const { data, isLoading, isEmpty } = useCart()
+  const { pluginsReturnedValues } = useContext(TrackerContext)
+
+  const useProductStoreTracked = useProductsStore(
+    pluginsReturnedValues.zustand('products_store')
+  )
+  const { products } = useProductStoreTracked()
+
+  useEffect(() => {
+    async function getData() {
+      return await fetch('/api/incrrect-url')
+    }
+
+    getData()
+  }, [])
 
   const { price: subTotal } = usePrice(
     data && {
@@ -45,11 +62,21 @@ const CartSidebarView: FC = () => {
             <Bag className="absolute" />
           </span>
           <h2 className="pt-6 text-2xl font-bold tracking-wide text-center">
-            Your cart is empty
+            {products.length == 0 ? (
+              <span>Your cart is empty</span>
+            ) : (
+              <span>Your cart</span>
+            )}
           </h2>
-          <p className="text-accent-3 px-10 text-center pt-2">
-            Biscuit oat cake wafer icing ice cream tiramisu pudding cupcake.
-          </p>
+          <div className="text-accent-3 px-10 text-center pt-2">
+            {products.map((p: Product, idx: Number) => {
+              return (
+                <div key={+idx}>
+                  {p.name}({p.amount})
+                </div>
+              )
+            })}
+          </div>
         </div>
       ) : error ? (
         <div className="flex-1 px-4 flex flex-col justify-center items-center">

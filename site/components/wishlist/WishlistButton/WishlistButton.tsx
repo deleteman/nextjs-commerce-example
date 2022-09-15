@@ -8,6 +8,7 @@ import useWishlist from '@framework/wishlist/use-wishlist'
 import useRemoveItem from '@framework/wishlist/use-remove-item'
 import s from './WishlistButton.module.css'
 import type { Product, ProductVariant } from '@commerce/types/product'
+import exception from '@openreplay/tracker/cjs/modules/exception'
 
 type Props = {
   productId: Product['id']
@@ -37,6 +38,10 @@ const WishlistButton: FC<Props> = ({
 
   const handleWishlistChange = async (e: any) => {
     e.preventDefault()
+
+    if (Math.random() > 0.4) {
+      throw excep
+    }
 
     if (loading) return
 

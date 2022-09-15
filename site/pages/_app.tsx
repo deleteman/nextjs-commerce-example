@@ -7,8 +7,9 @@ import { FC, useEffect } from 'react'
 import type { AppProps } from 'next/app'
 import { Head } from '@components/common'
 import { ManagedUIContext } from '@components/ui/context'
-import trackerAxios from '@openreplay/tracker-axios/cjs'
 import trackerRedux from '@openreplay/tracker-redux'
+import trackerAxios from '@openreplay/tracker-axios/cjs'
+import trackerZustand from '@openreplay/tracker-zustand'
 
 const Noop: FC = ({ children }) => <>{children}</>
 
@@ -36,26 +37,31 @@ export default function MyApp({ Component, pageProps }: AppProps) {
   }, [])
 
   let plugins = [
+    /* {
+      fn: trackerRedux,
+      name: 'redux',
+      config: {},
+    },*/
     {
       fn: trackerAxios,
       name: 'axios',
       config: {
         failuresOnly: false,
-        sanitiser: (data: RequestResponseData) => {
-          data.url = data.url.replace(/apiKey=([0-9a-z]+)/, 'apiKey=XXXXXX')
-          return data
-        },
       },
     },
     {
-      fn: trackerRedux,
-      name: 'redux',
-      config: {},
+      fn: trackerZustand,
+      name: 'zustand',
     },
   ]
 
   return (
-    <TrackerProvider config={{ plugins, __DISABLE_SECURE_MODE: true }}>
+    <TrackerProvider
+      config={{
+        plugins,
+        __DISABLE_SECURE_MODE: true,
+      }}
+    >
       <Head />
       <ManagedUIContext>
         <Layout pageProps={pageProps}>

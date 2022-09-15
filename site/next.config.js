@@ -18,7 +18,7 @@ module.exports = withCommerceConfig({
     defaultLocale: 'en-US',
   },
   images: {
-    domains: ['d3t32hsnjxo7q6.cloudfront.net'],
+    domains: ['d3t32hsnjxo7q6.cloudfront.net', 'cdn.shopify.com'],
   },
   commerce: {
     features: {
