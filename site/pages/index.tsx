@@ -45,10 +45,21 @@ export async function getStaticProps({
   }
 }
 
+function getPlan() {
+  const plans = ['free', 'pro', 'ee']
+
+  return plans[Math.floor(Math.random() * 2) + 1]
+}
+
+function getUTMSource() {
+  const plans = ['google', 'twitter', 'facebook', 'reddit']
+  return plans[Math.floor(Math.random() * 3) + 1]
+}
+
 export default function Home({
   products,
 }: InferGetStaticPropsType<typeof getStaticProps>) {
-  const { startTracking } = useContext(TrackerContext)
+  const { startTracking, setMetadata } = useContext(TrackerContext)
   const dispatch = useDispatch()
   const makeUpProductsList = useSelector((state: any) => state.makeUpProducts)
 
@@ -57,6 +68,8 @@ export default function Home({
   useEffect(() => {
     async function getProds() {
       await startTracking()
+      setMetadata('plan', getPlan())
+      setMetadata('utm_source', getUTMSource())
       dispatch(getMakeUpProducts() as any)
     }
 

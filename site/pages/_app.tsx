@@ -7,7 +7,6 @@ import { FC, useEffect } from 'react'
 import type { AppProps } from 'next/app'
 import { Head } from '@components/common'
 import { ManagedUIContext } from '@components/ui/context'
-import trackerAxios from '@openreplay/tracker-axios/cjs'
 import trackerRedux from '@openreplay/tracker-redux'
 
 const Noop: FC = ({ children }) => <>{children}</>
@@ -35,22 +34,10 @@ export default function MyApp({ Component, pageProps }: AppProps) {
     document.body.classList?.remove('loading')
   }, [])
 
-  let plugins = [
+  const plugins = [
     {
-      fn: trackerAxios,
-      name: 'axios',
-      config: {
-        failuresOnly: false,
-        sanitiser: (data: RequestResponseData) => {
-          data.url = data.url.replace(/apiKey=([0-9a-z]+)/, 'apiKey=XXXXXX')
-          return data
-        },
-      },
-    },
-    {
-      fn: trackerRedux,
       name: 'redux',
-      config: {},
+      fn: trackerRedux,
     },
   ]
 

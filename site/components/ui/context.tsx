@@ -11,6 +11,7 @@ import { Provider, useSelector } from 'react-redux'
 import createReduxStore from '../../store/store'
 import { TrackerContext } from 'context/trackerProvider'
 import { Store } from 'redux'
+import { plugins } from 'postcss.config'
 
 export interface State {
   displaySidebar: boolean
@@ -221,19 +222,17 @@ export const useUI = () => {
 }
 
 export const ManagedUIContext: FC = ({ children }) => {
-  const { initTracker, pluginsReturnedValues } = useContext(TrackerContext)
   const [store, setStore] = useState<Store>()
+  const { initTracker, pluginsReturnedValues } = useContext(TrackerContext)
 
   useEffect(() => {
     initTracker()
   }, [])
 
   useEffect(() => {
-    if (!pluginsReturnedValues['redux']) return
-    let middleWares = pluginsReturnedValues['redux']
-      ? [pluginsReturnedValues['redux']]
-      : []
-    setStore(createReduxStore(middleWares))
+    if (pluginsReturnedValues['redux']) {
+      setStore(createReduxStore([pluginsReturnedValues['redux']]))
+    }
   }, [pluginsReturnedValues])
 
   return (

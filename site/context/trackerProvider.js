@@ -70,6 +70,10 @@ function reducer(state, action) {
       state.tracker?.issue(action.payload?.name, action.payload?.data)
       return state
     }
+    case 'setMetadata': {
+      state.tracker.setMetadata(action.payload.key, '' + action.payload.value)
+      return state
+    }
   }
 }
 export default function TrackerProvider({ children, config = {} }) {
@@ -83,6 +87,8 @@ export default function TrackerProvider({ children, config = {} }) {
     initTracker: () => dispatch({ type: 'init' }),
     logEvent: (evnt) => dispatch({ type: 'logEvent', payload: evnt }),
     logIssue: (evnt) => dispatch({ type: 'logIssue', payload: evnt }),
+    setMetadata: (key, value) =>
+      dispatch({ type: 'setMetadata', payload: { key, value } }),
     pluginsReturnedValues: { ...state.pluginsReturnedValue },
   }
   return (

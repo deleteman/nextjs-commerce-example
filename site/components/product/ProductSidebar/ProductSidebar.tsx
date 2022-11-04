@@ -18,18 +18,25 @@ interface ProductSidebarProps {
 
 const ProductSidebar: FC<ProductSidebarProps> = ({ product, className }) => {
   const addItem = useAddItem()
-  const { logEvent, logIssue } = useContext(TrackerContext)
+  const { logEvent, logIssue, setMetadata } = useContext(TrackerContext)
   const { openSidebar, setSidebarView } = useUI()
   const [loading, setLoading] = useState(false)
   const [selectedOptions, setSelectedOptions] = useState<SelectedOptions>({})
+  const [productsInCart, setProductsInCart] = useState(0)
 
   useEffect(() => {
     selectDefaultOptionFromProduct(product, setSelectedOptions)
   }, [product])
 
+  useEffect(() => {
+    setMetadata('items_in_cart', productsInCart)
+  }, [productsInCart])
+
   const variant = getProductVariant(product, selectedOptions)
   const addToCart = async () => {
     setLoading(true)
+    console.log('Adding product to cart...')
+    await fetch('/api/wrongurl')
 
     const validSizes = product.options
       .filter((o) => o.id == 'option-size')
@@ -58,6 +65,7 @@ const ProductSidebar: FC<ProductSidebarProps> = ({ product, className }) => {
         variantId: String(variant ? variant.id : product.variants[0]?.id),
       })
       setSidebarView('CART_VIEW')
+      setProductsInCart(productsInCart + 1)
       openSidebar()
       console.log('Sending event...')
       logEvent({
