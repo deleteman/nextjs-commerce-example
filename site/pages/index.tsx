@@ -59,7 +59,7 @@ function getUTMSource() {
 export default function Home({
   products,
 }: InferGetStaticPropsType<typeof getStaticProps>) {
-  const { startTracking, setMetadata } = useContext(TrackerContext)
+  const { startTracking, setMetadata, usePlugin } = useContext(TrackerContext)
   const dispatch = useDispatch()
   const makeUpProductsList = useSelector((state: any) => state.makeUpProducts)
 
@@ -67,7 +67,10 @@ export default function Home({
 
   useEffect(() => {
     async function getProds() {
+      const assist = (await import('@openreplay/tracker-assist')).default
+
       await startTracking()
+      await usePlugin(assist())
       setMetadata('plan', getPlan())
       setMetadata('utm_source', getUTMSource())
       dispatch(getMakeUpProducts() as any)

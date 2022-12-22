@@ -1,7 +1,7 @@
 import '@assets/main.css'
 import '@assets/chrome-bug.css'
 import 'keen-slider/keen-slider.min.css'
-import TrackerProvider from '../context/trackerProvider'
+import TrackerProvider, { TrackerContext } from '../context/trackerProvider'
 
 import { FC, useEffect } from 'react'
 import type { AppProps } from 'next/app'

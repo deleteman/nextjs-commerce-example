@@ -19,6 +19,8 @@ function newTracker(config) {
     __DISABLE_SECURE_MODE:
       config?.__DISABLE_SECURE_MODE ||
       process.env.NEXT_PUBLIC_OPENREPLAY_DISABLE_SECURE_MODE,
+    verbose: true,
+    __debug__: true,
   }
   if (config?.ingestPoint || process.env.NEXT_PUBLIC_OPENREPLAY_INGEST_POINT) {
     trackerConfig.ingestPoint =
@@ -55,6 +57,10 @@ function reducer(state, action) {
       }
       return state
     }
+    case 'usePlugin': {
+      state.tracker.use(action.payload)
+      return state
+    }
     case 'start': {
       console.log('Starting tracker...')
       state.tracker.start()
@@ -84,6 +90,7 @@ export default function TrackerProvider({ children, config = {} }) {
   })
   let value = {
     startTracking: () => dispatch({ type: 'start' }),
+    usePlugin: (plugin) => dispatch({ type: 'usePlugin', payload: plugin }),
     initTracker: () => dispatch({ type: 'init' }),
     logEvent: (evnt) => dispatch({ type: 'logEvent', payload: evnt }),
     logIssue: (evnt) => dispatch({ type: 'logIssue', payload: evnt }),

@@ -30,6 +30,7 @@
   },
   "dependencies": {
     "@openreplay/tracker": "^4.1.3",
+    "@openreplay/tracker-assist": "^4.1.5",
     "@openreplay/tracker-axios": "^3.5.1",
     "@openreplay/tracker-redux": "^3.5.1",
     "axios": "^0.27.2",
